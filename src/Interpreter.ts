@@ -44,6 +44,12 @@ export function Interpreter(
     [TokenType.CopyNext]: function (token) {
       array[pointer + 1] = array[pointer++];
     },
+    [TokenType.Increament]: function (token) {
+      array[pointer] = (parseInt(array[pointer] ?? "0", 2) + 1).toString(2);
+    },
+    [TokenType.Decreament]: function (token) {
+      array[pointer] = (parseInt(array[pointer] ?? "0", 2) - 1).toString(2);
+    },
   } as Record<TokenType, (token: IParsed) => unknown>;
 
   for (let token of parsedTokens) {

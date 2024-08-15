@@ -8,7 +8,7 @@ const Tokenizer_1 = require("./Tokenizer");
 function cleanCode(code) {
     if (typeof code !== "string")
         throw new TypeError("Expected code to be a string, got " + typeof code);
-    return code.replace(/'[^']*'/g, "").replace(/[^\[\]><.!?:$]+/g, "");
+    return code.replace(/'[^']*'/g, "").replace(/[^\[\]><.!?:+\-$]+/g, "");
 }
 function parseRepeatCount(token) {
     return [...token.slice(1, -1)].reduce((a, b) => a + (b == "?" ? 2 : 1), 0);
@@ -26,6 +26,8 @@ function Parser(code) {
         Tokenizer_1.TokenType.Pointer,
         Tokenizer_1.TokenType.Print,
         Tokenizer_1.TokenType.Delete,
+        Tokenizer_1.TokenType.Increament,
+        Tokenizer_1.TokenType.Decreament,
     ];
     for (let token of tokens) {
         if (inRepeat && !canBeRepeated.includes(token.type))

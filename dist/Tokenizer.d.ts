@@ -5,7 +5,9 @@ export declare enum TokenType {
     Print = 3,
     PrintAll = 4,
     Delete = 5,
-    CopyNext = 6
+    CopyNext = 6,
+    Increament = 7,
+    Decreament = 8
 }
 export declare function getTokenType(token: string): TokenType;
 export interface IToken {

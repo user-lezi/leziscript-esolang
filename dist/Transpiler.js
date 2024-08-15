@@ -65,6 +65,36 @@ function Transpiler(code, opts = {}) {
         [Tokenizer_1.TokenType.CopyNext]: function () {
             transpiled.push(`array[pointer + 1] = array[pointer++];`);
         },
+        [Tokenizer_1.TokenType.Increament]: function () {
+            let regex = /^array\[pointer\]\ = \(parseInt/;
+            if (regex.test(transpiled[transpiled.length - 1])) {
+                transpiled[transpiled.length - 1] = transpiled[transpiled.length - 1].replace(/[\-+] \d+/g, (m) => {
+                    let sign = m.startsWith("+") ? 1 : -1;
+                    let num = Number(m.slice(2)) * sign;
+                    let newnum = num + 1;
+                    let newsign = newnum < 0 ? "-" : "+";
+                    return `${newsign} ${Math.abs(newnum)}`;
+                });
+            }
+            else {
+                transpiled.push(`array[pointer] = (parseInt(array[pointer] ?? "0", 2) + 1).toString(2);`);
+            }
+        },
+        [Tokenizer_1.TokenType.Decreament]: function () {
+            let regex = /^array\[pointer\]\ = \(parseInt/;
+            if (regex.test(transpiled[transpiled.length - 1])) {
+                transpiled[transpiled.length - 1] = transpiled[transpiled.length - 1].replace(/[\-+] \d+/g, (m) => {
+                    let sign = m.startsWith("+") ? 1 : -1;
+                    let num = Number(m.slice(2)) * sign;
+                    let newnum = num - 1;
+                    let newsign = newnum < 0 ? "-" : "+";
+                    return `${newsign} ${Math.abs(newnum)}`;
+                });
+            }
+            else {
+                transpiled.push(`array[pointer] = (parseInt(array[pointer] ?? "0", 2) - 1).toString(2);`);
+            }
+        },
     };
     for (let token of parsedTokens) {
         runner[token.type](token);

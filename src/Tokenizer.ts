@@ -6,6 +6,8 @@ export enum TokenType {
   PrintAll,
   Delete,
   CopyNext,
+  Increament,
+  Decreament,
 }
 
 export function getTokenType(token: string) {
@@ -21,6 +23,8 @@ export function getTokenType(token: string) {
   if (token == "$") return TokenType.PrintAll;
   if (token == "!") return TokenType.Delete;
   if (token == ":") return TokenType.CopyNext;
+  if (token == "+") return TokenType.Increament;
+  if (token == "-") return TokenType.Decreament;
 
   throw new SyntaxError(
     `Expected token to be a valid token type, got ${token}`,

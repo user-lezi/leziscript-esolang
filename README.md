@@ -100,5 +100,11 @@ Copies the value and sets it to the next pointer.
 - Using `:`
 - Eg. `[[]][]:[]` is same as `[[]][]>[[]][][]`
 
+### Increament/Decrement
+Increase/Decrease the value in the pointer by one.
+- Using `+` or `-`
+- Eg. `[[]][][[]]+` is same as `[[]][[]][]`
+  - *`101+` is same as `110`*
+
 
 > Created by **leziuwu** on discord

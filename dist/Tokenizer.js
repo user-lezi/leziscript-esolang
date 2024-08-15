@@ -12,6 +12,8 @@ var TokenType;
     TokenType[TokenType["PrintAll"] = 4] = "PrintAll";
     TokenType[TokenType["Delete"] = 5] = "Delete";
     TokenType[TokenType["CopyNext"] = 6] = "CopyNext";
+    TokenType[TokenType["Increament"] = 7] = "Increament";
+    TokenType[TokenType["Decreament"] = 8] = "Decreament";
 })(TokenType || (exports.TokenType = TokenType = {}));
 function getTokenType(token) {
     if (typeof token !== "string")
@@ -32,6 +34,10 @@ function getTokenType(token) {
         return TokenType.Delete;
     if (token == ":")
         return TokenType.CopyNext;
+    if (token == "+")
+        return TokenType.Increament;
+    if (token == "-")
+        return TokenType.Decreament;
     throw new SyntaxError(`Expected token to be a valid token type, got ${token}`);
 }
 function Tokenizer(code) {

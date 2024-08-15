@@ -18,15 +18,18 @@ d: 1100100
 let code =
   /* `
 [[]][?][][[]][!?][].:[???]![[]][?][][[]][][[]].:[??]![?][[]][?][]..[??]![??][[]].>[[]][??!][].>[[]][][[]][][!?][[]].<<.>>>[!?][[]][?][][[]][].[??!]![][?][[]][?][].[??]![][[]][?][].>[[]][??][][[]].
-`;*/ "[[]][][][[]][][][].>[[]][[]][][[]][][][[]].";
+`;*/ "[[]][][][[]][][?][[]]:++:+-++-----+[???]-.";
 let t: any, s: any;
 
 //console.log(a);
 
-//console.log(Highlight(code));
+console.log(Highlight(code));
+//console.log(Tokenizer(code));
+//console.log(Parser(code));
 //console.log(Interpreter(code, { doNotLog: true }));
 //console.log(Interpreter(code));
-console.log((t = Transpiler(code)));
-s = performance.now();
+console.log((t = Transpiler(code, { minify: true })));
+/*s = performance.now();
 eval(t.code);
 console.log("Took " + (performance.now() - s));
+*/

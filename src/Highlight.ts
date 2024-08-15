@@ -19,6 +19,8 @@ export const TokenHighlight = {
   PrintAll: parse(0x009900),
   Delete: parse(0xff4d4d),
   CopyNext: parse(0xf2ff66),
+  Increament: parse(0xccff99),
+  Decreament: parse(0xccff99),
 } as Record<string, IHighlight>;
 
 function parse(int: number) {

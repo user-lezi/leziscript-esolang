@@ -4,7 +4,7 @@ export function cleanCode(code: string) {
   if (typeof code !== "string")
     throw new TypeError("Expected code to be a string, got " + typeof code);
   /* Comments / Unwanted Characters */
-  return code.replace(/'[^']*'/g, "").replace(/[^\[\]><.!?:$]+/g, "");
+  return code.replace(/'[^']*'/g, "").replace(/[^\[\]><.!?:+\-$]+/g, "");
 }
 
 export function parseRepeatCount(token: string) {
@@ -34,6 +34,8 @@ export function Parser(code: string) {
     TokenType.Pointer,
     TokenType.Print,
     TokenType.Delete,
+    TokenType.Increament,
+    TokenType.Decreament,
   ];
   for (let token of tokens) {
     if (inRepeat && !canBeRepeated.includes(token.type))

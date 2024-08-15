@@ -38,6 +38,12 @@ function Interpreter(code, opts = {}) {
         [Tokenizer_1.TokenType.CopyNext]: function (token) {
             array[pointer + 1] = array[pointer++];
         },
+        [Tokenizer_1.TokenType.Increament]: function (token) {
+            array[pointer] = (parseInt(array[pointer] ?? "0", 2) + 1).toString(2);
+        },
+        [Tokenizer_1.TokenType.Decreament]: function (token) {
+            array[pointer] = (parseInt(array[pointer] ?? "0", 2) - 1).toString(2);
+        },
     };
     for (let token of parsedTokens) {
         runner[token.type](token);
