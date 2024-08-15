@@ -1,6 +1,0 @@
-run = "npm test"
-entrypoint = "README.md"
-modules = ["nodejs-20"]
-
-[nix]
-channel = "stable-24_05"
