@@ -1,5 +1,7 @@
 import { Parser, IParsed, isRepeatToken } from "./Parser";
 import { TokenType } from "./Tokenizer";
+import { readFileSync } from "fs";
+import { dirname, basename } from "path";
 
 export interface IInterpreterOptions {
   doNotLog: boolean;
@@ -8,9 +10,10 @@ export interface IInterpreterOptions {
 export function Interpreter(
   code: string,
   opts: Partial<IInterpreterOptions> = {},
+  root = ".",
 ) {
   let start = performance.now();
-  let { parsedTokens, code: _code } = Parser(code);
+  let { parsedTokens, code: _code } = Parser(code, root);
 
   let array: string[] = [""];
   let pointer = 0;
@@ -71,4 +74,13 @@ export function Interpreter(
     executionTime: performance.now() - start,
     options: opts,
   };
+}
+
+export function InterpretFiles(
+  file: string,
+  opts: Partial<IInterpreterOptions> = {},
+) {
+  let root = basename(file) == file ? "." : dirname(file);
+  let code = readFileSync(file, "utf8");
+  return Interpreter(code, opts, root);
 }

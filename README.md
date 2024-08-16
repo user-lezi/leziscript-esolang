@@ -57,6 +57,15 @@ console.log(Transpiler(code))
 */
 ```
 
+Here is the way to interpret or compile files together.
+```ts
+import { InterpretFiles, TranspileFiles } from "lzscript";
+let file = "file.lzs";
+
+console.log(InterpretFiles(file))
+console.log(TranspileFiles(file))
+```
+
 ### Interpreter Options
 | Name | Type | Description |
 | - | - | - |
@@ -105,6 +114,14 @@ Increase/Decrease the value in the pointer by one.
 - Using `+` or `-`
 - Eg. `[[]][][[]]+` is same as `[[]][[]][]`
   - *`101+` is same as `110`*
+
+
+### Run Another File
+Paste the code of someother file to the provided file.
+- Using `@(filename)`
+- Eg. `@(helloWorld.tzs)` or to get something from the dir where file is at `@(#someOther.tzs)` [`#` here is the dir name]
+
+
 
 
 > Created by **leziuwu** on discord

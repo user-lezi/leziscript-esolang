@@ -1,18 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Transpiler = Transpiler;
+exports.TranspileFiles = TranspileFiles;
 const uglify_js_1 = require("uglify-js");
 const js_1 = require("js-beautify/js");
 const Parser_1 = require("./Parser");
 const Tokenizer_1 = require("./Tokenizer");
-function Transpiler(code, opts = {}) {
+const fs_1 = require("fs");
+const path_1 = require("path");
+function Transpiler(code, opts = {}, root = ".") {
     let start = performance.now();
     let transpiled = [
         `let pointer = 0;`,
         `let array = [""];`,
         `let output = [];`,
     ];
-    let { parsedTokens } = (0, Parser_1.Parser)(code);
+    let { parsedTokens } = (0, Parser_1.Parser)(code, root);
     let logAll = parsedTokens[0].type == Tokenizer_1.TokenType.PrintAll
         ? (parsedTokens.shift(), true)
         : false;
@@ -117,5 +120,10 @@ function Transpiler(code, opts = {}) {
         options: opts,
         executionTime: performance.now() - start,
     };
+}
+function TranspileFiles(file, opts = {}) {
+    let root = (0, path_1.basename)(file) == file ? "." : (0, path_1.dirname)(file);
+    let code = (0, fs_1.readFileSync)(file, "utf8");
+    return Transpiler(code, opts, root);
 }
 //# sourceMappingURL=Transpiler.js.map

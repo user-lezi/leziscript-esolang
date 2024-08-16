@@ -4,6 +4,8 @@ import { minify } from "uglify-js";
 import { js } from "js-beautify/js";
 import { Parser, IParsed, isRepeatToken } from "./Parser";
 import { TokenType } from "./Tokenizer";
+import { readFileSync } from "fs";
+import { dirname, basename } from "path";
 
 export interface ITranspilerOptions {
   minify: boolean;
@@ -13,6 +15,7 @@ export interface ITranspilerOptions {
 export function Transpiler(
   code: string,
   opts: Partial<ITranspilerOptions> = {},
+  root = ".",
 ) {
   let start = performance.now();
   let transpiled = [
@@ -21,7 +24,7 @@ export function Transpiler(
     `let output = [];`,
   ];
 
-  let { parsedTokens } = Parser(code);
+  let { parsedTokens } = Parser(code, root);
   let logAll =
     parsedTokens[0].type == TokenType.PrintAll
       ? (parsedTokens.shift(), true)
@@ -155,4 +158,13 @@ export function Transpiler(
     options: opts,
     executionTime: performance.now() - start,
   };
+}
+
+export function TranspileFiles(
+  file: string,
+  opts: Partial<ITranspilerOptions> = {},
+) {
+  let root = basename(file) == file ? "." : dirname(file);
+  let code = readFileSync(file, "utf8");
+  return Transpiler(code, opts, root);
 }

@@ -1,11 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Interpreter = Interpreter;
+exports.InterpretFiles = InterpretFiles;
 const Parser_1 = require("./Parser");
 const Tokenizer_1 = require("./Tokenizer");
-function Interpreter(code, opts = {}) {
+const fs_1 = require("fs");
+const path_1 = require("path");
+function Interpreter(code, opts = {}, root = ".") {
     let start = performance.now();
-    let { parsedTokens, code: _code } = (0, Parser_1.Parser)(code);
+    let { parsedTokens, code: _code } = (0, Parser_1.Parser)(code, root);
     let array = [""];
     let pointer = 0;
     let output = "";
@@ -62,5 +65,10 @@ function Interpreter(code, opts = {}) {
         executionTime: performance.now() - start,
         options: opts,
     };
+}
+function InterpretFiles(file, opts = {}) {
+    let root = (0, path_1.basename)(file) == file ? "." : (0, path_1.dirname)(file);
+    let code = (0, fs_1.readFileSync)(file, "utf8");
+    return Interpreter(code, opts, root);
 }
 //# sourceMappingURL=Interpreter.js.map
