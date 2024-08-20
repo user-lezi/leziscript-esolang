@@ -121,6 +121,32 @@ Paste the code of someother file to the provided file.
 - Using `@(filename)`
 - Eg. `@(helloWorld.tzs)` or to get something from the dir where file is at `@(#someOther.tzs)` [`#` here is the dir name]
 
+## Encoders (for losers 💅)
+You can *~cheat~* encode text to make it runnable code.
+Usage:
+```ts
+import { Encoder } from "lzscript";
+let text = "I love to cheat!";
+console.log(Encoder(text));
+/*
+{
+ output: '[[]][][][[]][][][[]].>[[]][??!][].>[?][[]][][?][[]][][].>[?][[]][][??][[]].>[?!][[]][][?][[]][].>[?][[]][][][[]][][[]].>[[]][??!][].>[?!][[]][][[]][][].>[?][[]][][??][[]].>[[]][??!][].>[?][[]][?!][][?][[]].>[?][[]][][[]][?!][].>[?][[]][][][[]][][[]].>[?][[]][??][][[]].>[?!][[]][][[]][][].>[[]][??][][[]].',
+}
+*/
+```
+
+You can use different encoding styles. (*idktoexplainthestyles*)
+| Name | Description |
+| - | - |
+| `Normal` | Makes the encoder go to each character and encode it and prints it *(default, shown in above usage)* |
+| `Printer` | List all the characters at the start and then just changing the pointer and printing |
+| `OneSlot` | Just uses one pointer value |
+Usage:
+```ts
+import { Encoder, EncodeStyle } from "lzscript";
+console.log(Encoder("Some Text", EncodeStyle.Printer))
+```
+
 
 
 

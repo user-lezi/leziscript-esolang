@@ -6,6 +6,9 @@ import {
   Highlight,
   InterpretFiles,
   TranspileFiles,
+  Encoder,
+  EncodeStyle,
+  EncodeInAllStyles,
 } from ".";
 import * as a from ".";
 import { readFileSync } from "fs";
@@ -50,8 +53,17 @@ console.log(
   }),
 );
 */
+/*
 console.log(
   TranspileFiles("test_scripts/test_1.lzs", {
     minify: true,
   }),
 );
+*/
+
+let str =
+  "Lzscript, An Esolang that can be Interpreted or Transpile to javascript code.";
+//console.log(Encoder(str));
+//console.log(EncodeStyle);
+console.log((t = EncodeInAllStyles(str)));
+//console.log(t.map((x: any) => Interpreter(x.code, { doNotLog: true })));

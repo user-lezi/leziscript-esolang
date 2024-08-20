@@ -19,4 +19,5 @@ __exportStar(require("./Parser"), exports);
 __exportStar(require("./Interpreter"), exports);
 __exportStar(require("./Transpiler"), exports);
 __exportStar(require("./Highlight"), exports);
+__exportStar(require("./Encoder"), exports);
 //# sourceMappingURL=index.js.map
