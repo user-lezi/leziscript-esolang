@@ -1,6 +1,6 @@
 {
   "name": "lzscript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An Esolang that can be Interpreted or Transpile to javascript code.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
