@@ -24,7 +24,7 @@ function getTokenType(token) {
         return TokenType.Value;
     if (token == ">" || token == "<")
         return TokenType.Pointer;
-    if (/^\[[!?]+\]$/.test(token))
+    if (/^\[[!?&]+\]$/.test(token))
         return TokenType.Repeat;
     if (token == ".")
         return TokenType.Print;

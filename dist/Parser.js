@@ -11,10 +11,10 @@ const path_1 = require("path");
 function cleanCode(code) {
     if (typeof code !== "string")
         throw new TypeError("Expected code to be a string, got " + typeof code);
-    return code.replace(/'[^']*'/g, "").replace(/[^\[\]><.!?:+\-$]+/g, "");
+    return code.replace(/'[^']*'/g, "").replace(/[^\[\]><.!?&:+\-$]+/g, "");
 }
 function parseRepeatCount(token) {
-    return [...token.slice(1, -1)].reduce((a, b) => a + (b == "?" ? 2 : 1), 0);
+    return [...token.slice(1, -1)].reduce((a, b) => a + (b == "&" ? 12 : b == "?" ? 2 : 1), 0);
 }
 function isRepeatToken(token) {
     return token.type == Tokenizer_1.TokenType.Repeat;

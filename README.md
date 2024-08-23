@@ -81,16 +81,16 @@ console.log(TranspileFiles(file))
 Shorten your code using loops 🤓 ☝️
 
 - The loop can do `m` for `n` number of times.
-- Eg. `[??!][[]]`
-  -  here `n` is the value inside the first angled brackets (ie. `??!`)
+- Eg. `[&??!][[]]`
+  -  here `n` is the value inside the first angled brackets (ie. `&??!`)
   -  here `m` is the value after the first angled brackets (ie. `[[]]`)
-- `n` value is a string of `?` or `!`
-  - To parse `n`, `?` is valued as `2` and `!` as `1`.
-  - Eg. `??!` becomes `2 + 2 + 1`, which is `5`
+- `n` value is a string of `&`, `?` or `!`
+  - To parse `n`, `&` is valued as `12`, `?` is valued as `2` and `!` as `1`.
+  - Eg. `&??!` becomes `12 + 2 + 2 + 1`, which is `17`
 - Now, basically `m` will happen `n` times.
-  - So `[??!][[]]` becomes to `[[]]` repeats `5`
-  - Resulting in `[[]][[]][[]][[]][[]]`.
-  - Outputing as `11111`
+  - So `[&??!][[]]` becomes to `[[]]` repeats `17`
+  - Resulting in `[[]][[]][[]][[]][[]][[]][[]][[]][[]][[]][[]][[]][[]][[]][[]][[]][[]]`.
+  - Outputing as `11111111111111111`
 
 ### Print All
 Print all the values at once instead of print one by one.

@@ -6,11 +6,14 @@ export function cleanCode(code: string) {
   if (typeof code !== "string")
     throw new TypeError("Expected code to be a string, got " + typeof code);
   /* Comments / Unwanted Characters */
-  return code.replace(/'[^']*'/g, "").replace(/[^\[\]><.!?:+\-$]+/g, "");
+  return code.replace(/'[^']*'/g, "").replace(/[^\[\]><.!?&:+\-$]+/g, "");
 }
 
 export function parseRepeatCount(token: string) {
-  return [...token.slice(1, -1)].reduce((a, b) => a + (b == "?" ? 2 : 1), 0);
+  return [...token.slice(1, -1)].reduce(
+    (a, b) => a + (b == "&" ? 12 : b == "?" ? 2 : 1),
+    0,
+  );
 }
 
 export type IParsed<T = false> = IToken &

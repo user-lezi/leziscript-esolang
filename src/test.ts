@@ -66,4 +66,4 @@ let str =
 //console.log(Encoder(str));
 //console.log(EncodeStyle);
 console.log((t = EncodeInAllStyles(str)));
-//console.log(t.map((x: any) => Interpreter(x.code, { doNotLog: true })));
+console.log(t.map((x: any) => Interpreter(x.code, { doNotLog: true })));

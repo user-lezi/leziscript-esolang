@@ -18,7 +18,7 @@ export function getTokenType(token: string) {
 
   if (token == "[]" || token == "[[]]") return TokenType.Value;
   if (token == ">" || token == "<") return TokenType.Pointer;
-  if (/^\[[!?]+\]$/.test(token)) return TokenType.Repeat;
+  if (/^\[[!?&]+\]$/.test(token)) return TokenType.Repeat;
   if (token == ".") return TokenType.Print;
   if (token == "$") return TokenType.PrintAll;
   if (token == "!") return TokenType.Delete;

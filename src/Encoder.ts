@@ -67,9 +67,15 @@ function en(str: string) {
     : "";
 }
 function repeatN(n: number) {
-  let a = Math.floor(n / 2);
-  let b = n % 2;
-  return (a > 0 ? "?".repeat(a) : "") + (b > 0 ? "!" : "");
+  let a = Math.floor(n / 12);
+  let b = n % 12;
+  let c = Math.floor(b / 2);
+  let d = b % 2;
+  return (
+    (a > 0 ? "&".repeat(a) : "") +
+    (c > 0 ? "?".repeat(c) : "") +
+    (d > 0 ? "!" : "")
+  );
 }
 function useRepeats(code: string) {
   let tokens = Tokenizer(code);
