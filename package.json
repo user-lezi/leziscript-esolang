@@ -1,12 +1,13 @@
 {
   "name": "lzscript",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "An Esolang that can be Interpreted or Transpile to javascript code.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "prettier src --w && tsc",
-    "test": "npm run build && node dist/test.js"
+    "main": "node dist/test.js",
+    "test": "npm run build && npm run main"
   },
   "keywords": [
     "leziscript",
@@ -16,13 +17,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^20.14.9",
-    "prettier": "^3.3.2",
-    "typescript": "^5.5.2"
-  },
-  "dependencies": {
-    "js-beautify": "^1.15.1",
-    "uglify-js": "^3.18.0"
+    "@types/node": "^20.17.9",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2"
   },
   "files": [
     "dist",
