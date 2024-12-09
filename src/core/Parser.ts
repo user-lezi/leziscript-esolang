@@ -122,9 +122,9 @@ export class ParsedToken<T extends ParsedTokenType> {
   }
 }
 export interface ParserOptions {
-  checkFiles?: boolean;
+  checkFiles: boolean;
 }
-export const DefaultParserOptions: Required<ParserOptions> = {
+export const DefaultParserOptions: ParserOptions = {
   checkFiles: true,
 };
 export class Parser {
@@ -132,7 +132,7 @@ export class Parser {
     "?": 2,
     "!": 1,
   };
-  public static Parse(code: string, options?: ParserOptions) {
+  public static Parse(code: string, options?: Partial<ParserOptions>) {
     return new this(Tokenizer.Tokenize(code), options);
   }
   public static ParseLoopCount(token: string) {
@@ -146,10 +146,10 @@ export class Parser {
 
   #tokenizer: Tokenizer;
   public tokens: ParsedToken<ParsedTokenType>[] = [];
-  public options: Required<ParserOptions>;
+  public options: ParserOptions;
   public constructor(
     tokenizer: Tokenizer,
-    options: ParserOptions = DefaultParserOptions,
+    options: Partial<ParserOptions> = DefaultParserOptions,
   ) {
     this.options = {
       ...DefaultParserOptions,
@@ -223,7 +223,8 @@ export class Parser {
             info[1] ||
             info.pointerNext ||
             info.pointerPrevious ||
-            info.print
+            info.print ||
+            info.log
           ) {
             this.tokens.push(new ParsedToken(ParsedTokenType.Normal, token));
           }

@@ -180,7 +180,8 @@ class Parser {
                         info[1] ||
                         info.pointerNext ||
                         info.pointerPrevious ||
-                        info.print) {
+                        info.print ||
+                        info.log) {
                         this.tokens.push(new ParsedToken(ParsedTokenType.Normal, token));
                     }
                 }

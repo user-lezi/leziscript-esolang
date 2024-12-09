@@ -13,7 +13,7 @@ class Tokenizer {
     tokens;
     code;
     static CommentChar = '"';
-    static Reserved = "[[]] [] < > @ .".split(" ");
+    static Reserved = "[[]] [] < > @ . #".split(" ");
     static ReservedTokenInfo(token) {
         const is = (s) => token.token == s;
         return {
@@ -23,6 +23,7 @@ class Tokenizer {
             pointerPrevious: is("<"),
             fileHead: is("@"),
             print: is("."),
+            log: is("#"),
         };
     }
     static RawTokenize(code) {

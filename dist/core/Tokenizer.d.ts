@@ -23,6 +23,7 @@ export declare class Tokenizer {
         pointerPrevious: boolean;
         fileHead: boolean;
         print: boolean;
+        log: boolean;
     };
     private static RawTokenize;
     static Tokenize(code: string): Tokenizer;

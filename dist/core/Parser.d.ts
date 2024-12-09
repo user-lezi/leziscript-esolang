@@ -25,20 +25,20 @@ export declare class ParsedToken<T extends ParsedTokenType> {
     toString(indent?: number): string;
 }
 export interface ParserOptions {
-    checkFiles?: boolean;
+    checkFiles: boolean;
 }
-export declare const DefaultParserOptions: Required<ParserOptions>;
+export declare const DefaultParserOptions: ParserOptions;
 export declare class Parser {
     #private;
     static readonly LoopValues: {
         "?": number;
         "!": number;
     };
-    static Parse(code: string, options?: ParserOptions): Parser;
+    static Parse(code: string, options?: Partial<ParserOptions>): Parser;
     static ParseLoopCount(token: string): number;
     tokens: ParsedToken<ParsedTokenType>[];
-    options: Required<ParserOptions>;
-    constructor(tokenizer: Tokenizer, options?: ParserOptions);
+    options: ParserOptions;
+    constructor(tokenizer: Tokenizer, options?: Partial<ParserOptions>);
     get tokenizer(): Tokenizer;
     get size(): number;
     toString(indent?: number): string;

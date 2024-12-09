@@ -15,7 +15,7 @@ export enum TokenType {
 }
 export class Tokenizer {
   public static readonly CommentChar = '"';
-  public static readonly Reserved = "[[]] [] < > @ .".split(" ");
+  public static readonly Reserved = "[[]] [] < > @ . #".split(" ");
 
   public static ReservedTokenInfo(token: IToken) {
     const is = (s: string) => token.token == s;
@@ -26,6 +26,7 @@ export class Tokenizer {
       pointerPrevious: is("<"),
       fileHead: is("@"),
       print: is("."),
+      log: is("#"),
     };
   }
   private static RawTokenize(code: string) {
