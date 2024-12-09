@@ -1,0 +1,5 @@
+[[]][???][].>
+"call"@(#scripts/test.lzs)>
+
+"looped?"
+[?](@(#scripts/test.lzs)>)
