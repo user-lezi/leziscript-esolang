@@ -1,6 +1,6 @@
 import { inspect } from "util";
 import { IToken, Tokenizer, TokenType } from "./Tokenizer";
-import { boldText, redText, sliceText } from "../util";
+import { boldText, redText, resolveFileName, sliceText } from "../util";
 import { extname, join } from "path";
 import { accessSync, existsSync } from "fs";
 
@@ -82,7 +82,7 @@ export type IParsedTokenData<T extends ParsedTokenType> =
         ? {
             filename: string;
           }
-        : {};
+        : ReturnType<typeof Tokenizer.ReservedTokenInfo>;
 export class ParsedToken<T extends ParsedTokenType> {
   public data = {} as IParsedTokenData<T>;
   constructor(
@@ -202,11 +202,9 @@ export class Parser {
                   );
                 parsedToken.data.filename = fileNameToken.token.slice(1, -1);
                 if (this.options.checkFiles) {
-                  let filename = parsedToken.data.filename;
+                  let filename = resolveFileName(parsedToken.data.filename);
                   let ext = extname(filename);
                   if (ext !== ".lzs") throw ParserError.InvalidFile(tokenizer);
-                  if (filename.startsWith("#"))
-                    filename = join(process.cwd(), filename.slice(1));
                   if (!existsSync(filename))
                     throw ParserError.InvalidFile(tokenizer);
                 }
@@ -222,7 +220,9 @@ export class Parser {
             info.print ||
             info.log
           ) {
-            this.tokens.push(new ParsedToken(ParsedTokenType.Normal, token));
+            let parsedToken = new ParsedToken(ParsedTokenType.Normal, token);
+            parsedToken.data = info;
+            this.tokens.push(parsedToken);
           }
         }
       }

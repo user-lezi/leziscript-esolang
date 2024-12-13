@@ -12,7 +12,7 @@ export type IParsedTokenData<T extends ParsedTokenType> = T extends ParsedTokenT
     code: ParsedToken<ParsedTokenType>[];
 } : T extends ParsedTokenType.File ? {
     filename: string;
-} : {};
+} : ReturnType<typeof Tokenizer.ReservedTokenInfo>;
 export declare class ParsedToken<T extends ParsedTokenType> {
     type: T;
     token: IToken;

@@ -158,12 +158,10 @@ class Parser {
                                     throw ParserError.DisallowedToken(tokenizer, ParsedTokenType.Block);
                                 parsedToken.data.filename = fileNameToken.token.slice(1, -1);
                                 if (this.options.checkFiles) {
-                                    let filename = parsedToken.data.filename;
+                                    let filename = (0, util_1.resolveFileName)(parsedToken.data.filename);
                                     let ext = (0, path_1.extname)(filename);
                                     if (ext !== ".lzs")
                                         throw ParserError.InvalidFile(tokenizer);
-                                    if (filename.startsWith("#"))
-                                        filename = (0, path_1.join)(process.cwd(), filename.slice(1));
                                     if (!(0, fs_1.existsSync)(filename))
                                         throw ParserError.InvalidFile(tokenizer);
                                 }
@@ -177,7 +175,9 @@ class Parser {
                         info.pointerPrevious ||
                         info.print ||
                         info.log) {
-                        this.tokens.push(new ParsedToken(ParsedTokenType.Normal, token));
+                        let parsedToken = new ParsedToken(ParsedTokenType.Normal, token);
+                        parsedToken.data = info;
+                        this.tokens.push(parsedToken);
                     }
                 }
             }
