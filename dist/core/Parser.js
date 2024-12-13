@@ -164,13 +164,8 @@ class Parser {
                                         throw ParserError.InvalidFile(tokenizer);
                                     if (filename.startsWith("#"))
                                         filename = (0, path_1.join)(process.cwd(), filename.slice(1));
-                                    try {
-                                        if (!(0, fs_1.existsSync)(filename))
-                                            throw ParserError.InvalidFile(tokenizer);
-                                    }
-                                    catch {
+                                    if (!(0, fs_1.existsSync)(filename))
                                         throw ParserError.InvalidFile(tokenizer);
-                                    }
                                 }
                                 this.tokens.push(parsedToken);
                             }

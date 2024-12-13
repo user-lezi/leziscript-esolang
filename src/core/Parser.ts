@@ -2,7 +2,7 @@ import { inspect } from "util";
 import { IToken, Tokenizer, TokenType } from "./Tokenizer";
 import { boldText, redText, sliceText } from "../util";
 import { extname, join } from "path";
-import { existsSync } from "fs";
+import { accessSync, existsSync } from "fs";
 
 const ParserError = {
   Unknown: (tokenizer: Tokenizer) => {
@@ -207,12 +207,8 @@ export class Parser {
                   if (ext !== ".lzs") throw ParserError.InvalidFile(tokenizer);
                   if (filename.startsWith("#"))
                     filename = join(process.cwd(), filename.slice(1));
-                  try {
-                    if (!existsSync(filename))
-                      throw ParserError.InvalidFile(tokenizer);
-                  } catch {
+                  if (!existsSync(filename))
                     throw ParserError.InvalidFile(tokenizer);
-                  }
                 }
                 this.tokens.push(parsedToken);
               }
