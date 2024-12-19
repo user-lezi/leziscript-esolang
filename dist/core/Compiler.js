@@ -42,24 +42,21 @@ class Compiler {
     }
     async run() {
         let executionTimeStart = performance.now();
-        let initialCode = `/* Initial Definations */\npointer = 0;\nbits = new Int32Array(3000);\noutput = "";\nfunction _print() {\n${" ".repeat(this.options.codeIndent)}return String.fromCharCode(bits[pointer])\n}\n`;
+        let initialCode = `/* Initial Definations */\nlet pointer = 0;\nlet bits = new Int32Array(3000);\nlet output = "";\nfunction _print() {\n${" ".repeat(this.options.codeIndent)}return String.fromCharCode(bits[pointer])\n}\n`;
         let outputCodeLines = splitlines(initialCode);
         for (let i = 0; i < this.#parser.tokens.length; i++) {
             let compiled = compileToken(this.#parser.tokens[i], this);
             if (compiled.length)
                 outputCodeLines.push(...compiled);
         }
-        let outputCode = outputCodeLines.join("\n");
+        outputCodeLines = minifyOutput1(outputCodeLines);
+        let outputCode = minifyOutput2(outputCodeLines.join("\n"));
         if (this.options.minify) {
-            outputCode = (0, uglify_js_1.minify)(outputCode, {
+            outputCode = (0, uglify_js_1.minify)(outputCode + "\nconsole.log(output);", {
                 toplevel: true,
-                mangle: {
-                    toplevel: true,
-                    reserved: ["output"],
-                },
                 compress: {},
             }).code;
-            outputCode += "return output;";
+            outputCode = outputCode.replace(/[,;]?console\.log\(\w+\);$/, (m) => `;return ${m.split("(")[1].slice(0, -2)};`);
         }
         else
             outputCode += `\nreturn output;`;
@@ -116,5 +113,102 @@ function compileToken(token, compiler) {
 }
 function splitlines(str) {
     return str.split("\n");
+}
+function minifyOutput1(lines) {
+    if (lines.length < 3)
+        return lines;
+    let output = [lines.shift()];
+    let linecount = lines.length;
+    console.log(lines);
+    for (let i = 1; i < linecount + 1; i++) {
+        let lastline = output[output.length - 1];
+        let line = lines.shift();
+        if (line == undefined)
+            break;
+        if (!line.length)
+            continue;
+        let type = getLineType(line);
+        if (type && isLastLineSame(line, lastline)) {
+            let indent = " ".repeat(getLineIndent(lastline));
+            if (type == LastLineType.Shift) {
+                let n = Number(parseLastLine(lastline, type));
+                let m = Number(parseLastLine(line, type));
+                output.pop();
+                output.push(`${indent}bits[pointer] <<= ${n + m};`);
+            }
+            else if (type == LastLineType.Pointer) {
+                let n = Number(parseLastLine(lastline, type));
+                let m = Number(parseLastLine(line, type));
+                let mn = m + n;
+                output.pop();
+                if (mn)
+                    output.push(`${indent}pointer += ${mn};`);
+            }
+            else if (type == LastLineType.Output) {
+                let n = Number(parseLastLine(lastline, type));
+                output.pop();
+                output.push(`${indent}output += _print().repeat(${n + 1});`);
+            }
+            else {
+                throw new Error("not possible");
+            }
+        }
+        else
+            output.push(line);
+    }
+    return output;
+}
+function minifyOutput2(code) {
+    return code.replace(/pointer \+= -\d+;/g, (m) => `pointer -= ${m.split("-")[1]}`);
+}
+var LastLineType;
+(function (LastLineType) {
+    LastLineType[LastLineType["Shift"] = 1] = "Shift";
+    LastLineType[LastLineType["Pointer"] = 2] = "Pointer";
+    LastLineType[LastLineType["Output"] = 3] = "Output";
+})(LastLineType || (LastLineType = {}));
+function getLineIndent(line) {
+    for (let i = 0; i < line.length; i++) {
+        if (/[^ ]/.test(line[i]))
+            return i;
+    }
+    return 0;
+}
+function getLineType(line) {
+    if (!line)
+        return null;
+    line = line.trim();
+    return /^bits\[pointer\] <<= \d+;$/.test(line)
+        ? LastLineType.Shift
+        : /^pointer \+= -?\d+;$/.test(line)
+            ? LastLineType.Pointer
+            : /^output \+= _print\(\)(\.repeat\(\d+\))*;$/.test(line)
+                ? LastLineType.Output
+                : null;
+}
+function isLastLineSame(line, lastline) {
+    if (lastline && line) {
+        if (getLineIndent(line) == getLineIndent(lastline)) {
+            let type = [getLineType(line), getLineType(lastline)];
+            if (type[0] && type[1]) {
+                return type[0] == type[1];
+            }
+        }
+    }
+    return false;
+}
+function parseLastLine(line, type) {
+    line = line.trim();
+    switch (type) {
+        case LastLineType.Shift:
+            return line.split("<<= ")[1].slice(0, -1);
+        case LastLineType.Pointer:
+            return line.split("+= ")[1].slice(0, -1);
+        case LastLineType.Output:
+            let l = line.split("+= ")[1].slice(0, -1);
+            return l.includes(".") ? l.split("(")[2].slice(0, -1) : "1";
+        default:
+            return "";
+    }
 }
 //# sourceMappingURL=Compiler.js.map
