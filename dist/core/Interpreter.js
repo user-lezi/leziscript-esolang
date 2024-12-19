@@ -75,7 +75,7 @@ class Interpreter {
                                 internal.bits[internal.pointer];
                             internal.pointer++;
                         }
-                        else if (info.copy) {
+                        else if (info.delete) {
                             internal.bits[internal.pointer] >>= 1;
                         }
                         else if (info[0] || info[1]) {

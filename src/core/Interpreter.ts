@@ -104,7 +104,7 @@ export class Interpreter {
               internal.bits[internal.pointer + 1] =
                 internal.bits[internal.pointer];
               internal.pointer++;
-            } else if (info.copy) {
+            } else if (info.delete) {
               /* 
               Delete
               !
