@@ -169,6 +169,11 @@ function minifyOutput1(lines: string[]) {
         let m = Number(parseLastLine(line, type));
         output.pop();
         output.push(`${indent}bits[pointer] <<= ${n + m};`);
+      } else if (type == LastLineType.Delete) {
+        let n = Number(parseLastLine(lastline, type));
+        let m = Number(parseLastLine(line, type));
+        output.pop();
+        output.push(`${indent}bits[pointer] >>= ${n + m};`);
       } else if (type == LastLineType.Pointer) {
         let n = Number(parseLastLine(lastline, type));
         let m = Number(parseLastLine(line, type));
@@ -194,6 +199,7 @@ function minifyOutput2(code: string) {
 }
 enum LastLineType {
   Shift = 1,
+  Delete,
   Pointer,
   Output,
 }
@@ -210,11 +216,13 @@ function getLineType(line: string) {
   line = line.trim();
   return /^bits\[pointer\] <<= \d+;$/.test(line)
     ? LastLineType.Shift
-    : /^pointer \+= -?\d+;$/.test(line)
-      ? LastLineType.Pointer
-      : /^output \+= _print\(\)(\.repeat\(\d+\))*;$/.test(line)
-        ? LastLineType.Output
-        : null;
+    : /^bits\[pointer\] >>= \d+;$/.test(line)
+      ? LastLineType.Delete
+      : /^pointer \+= -?\d+;$/.test(line)
+        ? LastLineType.Pointer
+        : /^output \+= _print\(\)(\.repeat\(\d+\))*;$/.test(line)
+          ? LastLineType.Output
+          : null;
 }
 function isLastLineSame(line: string, lastline: string): boolean {
   if (lastline && line) {
@@ -234,6 +242,9 @@ function parseLastLine<T extends LastLineType>(line: string, type: T): string {
     case LastLineType.Shift:
       //bits[pointer] <<= n;
       return line.split("<<= ")[1].slice(0, -1);
+    case LastLineType.Delete:
+      //bits[pointer] >>= n;
+      return line.split(">>= ")[1].slice(0, -1);
     case LastLineType.Pointer:
       //pointer += n;
       return line.split("+= ")[1].slice(0, -1);

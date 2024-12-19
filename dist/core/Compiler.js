@@ -145,6 +145,12 @@ function minifyOutput1(lines) {
                 output.pop();
                 output.push(`${indent}bits[pointer] <<= ${n + m};`);
             }
+            else if (type == LastLineType.Delete) {
+                let n = Number(parseLastLine(lastline, type));
+                let m = Number(parseLastLine(line, type));
+                output.pop();
+                output.push(`${indent}bits[pointer] >>= ${n + m};`);
+            }
             else if (type == LastLineType.Pointer) {
                 let n = Number(parseLastLine(lastline, type));
                 let m = Number(parseLastLine(line, type));
@@ -173,8 +179,9 @@ function minifyOutput2(code) {
 var LastLineType;
 (function (LastLineType) {
     LastLineType[LastLineType["Shift"] = 1] = "Shift";
-    LastLineType[LastLineType["Pointer"] = 2] = "Pointer";
-    LastLineType[LastLineType["Output"] = 3] = "Output";
+    LastLineType[LastLineType["Delete"] = 2] = "Delete";
+    LastLineType[LastLineType["Pointer"] = 3] = "Pointer";
+    LastLineType[LastLineType["Output"] = 4] = "Output";
 })(LastLineType || (LastLineType = {}));
 function getLineIndent(line) {
     for (let i = 0; i < line.length; i++) {
@@ -189,11 +196,13 @@ function getLineType(line) {
     line = line.trim();
     return /^bits\[pointer\] <<= \d+;$/.test(line)
         ? LastLineType.Shift
-        : /^pointer \+= -?\d+;$/.test(line)
-            ? LastLineType.Pointer
-            : /^output \+= _print\(\)(\.repeat\(\d+\))*;$/.test(line)
-                ? LastLineType.Output
-                : null;
+        : /^bits\[pointer\] >>= \d+;$/.test(line)
+            ? LastLineType.Delete
+            : /^pointer \+= -?\d+;$/.test(line)
+                ? LastLineType.Pointer
+                : /^output \+= _print\(\)(\.repeat\(\d+\))*;$/.test(line)
+                    ? LastLineType.Output
+                    : null;
 }
 function isLastLineSame(line, lastline) {
     if (lastline && line) {
@@ -211,6 +220,8 @@ function parseLastLine(line, type) {
     switch (type) {
         case LastLineType.Shift:
             return line.split("<<= ")[1].slice(0, -1);
+        case LastLineType.Delete:
+            return line.split(">>= ")[1].slice(0, -1);
         case LastLineType.Pointer:
             return line.split("+= ")[1].slice(0, -1);
         case LastLineType.Output:
