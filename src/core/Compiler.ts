@@ -151,7 +151,6 @@ function minifyOutput1(lines: string[]) {
   if (lines.length < 3) return lines;
   let output: string[] = [lines.shift()!];
   let linecount = lines.length;
-  console.log(lines);
   for (let i = 1; i < linecount + 1; i++) {
     let lastline = output[output.length - 1];
     let line = lines.shift();
