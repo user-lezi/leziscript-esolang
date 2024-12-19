@@ -11,6 +11,7 @@ export declare class Compiler {
     static Compile(code: string, options?: Partial<ICompilerOptions>): Compiler;
     options: ICompilerOptions;
     constructor(parser: Parser, options?: Partial<ICompilerOptions>);
+    __incLoopIteratorCount(): number;
     get parser(): Parser;
     get tokenizer(): Tokenizer;
     get code(): string;

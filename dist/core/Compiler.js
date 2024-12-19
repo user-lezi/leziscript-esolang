@@ -25,11 +25,15 @@ class Compiler {
     }
     #parser;
     #tokenizer;
+    #loop_iterator = 0;
     options;
     constructor(parser, options = exports.DefaultCompilerOption) {
         this.#parser = parser;
         this.#tokenizer = parser.tokenizer;
         this.options = { ...exports.DefaultCompilerOption, ...options };
+    }
+    __incLoopIteratorCount() {
+        return this.#loop_iterator++;
     }
     get parser() {
         return this.#parser;
@@ -89,7 +93,7 @@ function compileToken(token, compiler) {
     }
     else if (token.isLoop()) {
         let codeLines = compileToken(token.data.code, compiler);
-        let loopStatement = splitlines(CompileCodeFor.Loop(token.data.loopCount, "iterator_" + Math.floor(Math.random() * 1000), codeLines, compiler.options.codeIndent));
+        let loopStatement = splitlines(CompileCodeFor.Loop(token.data.loopCount, "iterator_" + compiler.__incLoopIteratorCount(), codeLines, compiler.options.codeIndent));
         output.push(...loopStatement);
     }
     else if (token.isNormal()) {

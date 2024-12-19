@@ -41,6 +41,7 @@ export class Compiler {
   }
   #parser: Parser;
   #tokenizer: Tokenizer;
+  #loop_iterator = 0;
   public options: ICompilerOptions;
   public constructor(
     parser: Parser,
@@ -49,6 +50,9 @@ export class Compiler {
     this.#parser = parser;
     this.#tokenizer = parser.tokenizer;
     this.options = { ...DefaultCompilerOption, ...options };
+  }
+  public __incLoopIteratorCount() {
+    return this.#loop_iterator++;
   }
 
   public get parser() {
@@ -115,7 +119,7 @@ function compileToken(
     let loopStatement = splitlines(
       CompileCodeFor.Loop(
         token.data.loopCount,
-        "iterator_" + Math.floor(Math.random() * 1000),
+        "iterator_" + compiler.__incLoopIteratorCount(),
         codeLines,
         compiler.options.codeIndent,
       ),
