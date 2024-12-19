@@ -24,6 +24,8 @@ export declare class Tokenizer {
         fileHead: boolean;
         print: boolean;
         log: boolean;
+        copy: boolean;
+        delete: boolean;
     };
     private static RawTokenize;
     static Tokenize(code: string): Tokenizer;

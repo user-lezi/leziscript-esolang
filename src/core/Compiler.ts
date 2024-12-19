@@ -131,6 +131,10 @@ function compileToken(
       output.push(`output += _print();`);
     } else if (info.log) {
       output.push(`console.log(_print());`);
+    } else if (info.copy) {
+      output.push(`bits[pointer + 1] = bits[pointer];`, `pointer++;`);
+    } else if (info.delete) {
+      output.push(`bits[pointer] >>= 1;`);
     } else if (info[0] || info[1]) {
       output.push(`bits[pointer] <<= 1;`);
       if (info[1]) output.push(`bits[pointer]++;`);

@@ -218,7 +218,9 @@ export class Parser {
             info.pointerNext ||
             info.pointerPrevious ||
             info.print ||
-            info.log
+            info.log ||
+            info.copy ||
+            info.delete
           ) {
             let parsedToken = new ParsedToken(ParsedTokenType.Normal, token);
             parsedToken.data = info;

@@ -70,6 +70,14 @@ class Interpreter {
                         else if (info.log && !this.options.doNotLog) {
                             console.log(internal.print());
                         }
+                        else if (info.copy) {
+                            internal.bits[internal.pointer + 1] =
+                                internal.bits[internal.pointer];
+                            internal.pointer++;
+                        }
+                        else if (info.copy) {
+                            internal.bits[internal.pointer] >>= 1;
+                        }
                         else if (info[0] || info[1]) {
                             internal.bits[internal.pointer] <<= 1;
                             if (info[1])
