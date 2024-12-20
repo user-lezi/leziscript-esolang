@@ -13,7 +13,7 @@ export declare class Interpreter {
     get parser(): Parser;
     get tokenizer(): Tokenizer;
     get code(): string;
-    run(): Promise<{
+    run(): {
         internal: {
             pointer: number;
             bits: Int32Array<ArrayBuffer>;
@@ -21,6 +21,6 @@ export declare class Interpreter {
         };
         output: string;
         exectionTime: number;
-    }>;
+    };
 }
 //# sourceMappingURL=Interpreter.d.ts.map

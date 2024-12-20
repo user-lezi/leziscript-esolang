@@ -44,7 +44,7 @@ export class Interpreter {
     return this.#parser.code();
   }
 
-  public async run() {
+  public run() {
     let executionTimeStart = performance.now();
     let internal = {
       pointer: 0,

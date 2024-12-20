@@ -44,7 +44,7 @@ class Compiler {
     get code() {
         return this.#parser.code();
     }
-    async run() {
+    run() {
         let executionTimeStart = performance.now();
         let initialCode = `/* Initial Definations */\nlet pointer = 0;\nlet bits = new Int32Array(3000);\nlet output = "";\nfunction _print() {\n${" ".repeat(this.options.codeIndent)}return String.fromCharCode(bits[pointer])\n}\n`;
         let outputCodeLines = splitlines(initialCode);

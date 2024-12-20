@@ -15,9 +15,9 @@ export declare class Compiler {
     get parser(): Parser;
     get tokenizer(): Tokenizer;
     get code(): string;
-    run(): Promise<{
+    run(): {
         outputCode: string;
         exectionTime: number;
-    }>;
+    };
 }
 //# sourceMappingURL=Compiler.d.ts.map

@@ -29,7 +29,7 @@ class Interpreter {
     get code() {
         return this.#parser.code();
     }
-    async run() {
+    run() {
         let executionTimeStart = performance.now();
         let internal = {
             pointer: 0,
