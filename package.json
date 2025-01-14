@@ -19,13 +19,13 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^20.17.9",
+    "@types/uglify-js": "^3.17.5",
     "prettier": "^3.4.2",
     "tinybench": "^3.0.7",
     "typedoc": "^0.27.6",
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@types/uglify-js": "^3.17.5",
     "uglify-js": "^3.19.3"
   }
 }
