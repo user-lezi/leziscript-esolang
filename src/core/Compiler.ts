@@ -80,10 +80,12 @@ export class Compiler {
         toplevel: true,
         compress: {},
       }).code;
-      outputCode = outputCode.replace(
-        /[,;]?console\.log\(\w+\);$/,
-        (m) => `;return ${m.split("(")[1].slice(0, -2)};`,
-      );
+      outputCode = outputCode.endsWith(`console.log("");`)
+        ? outputCode.replace(/[,;]?console\.log\(""\);$/, ';return "";')
+        : outputCode.replace(
+            /[,;]?console\.log\(\w+\);$/,
+            (m) => `;return ${m.split("(")[1].slice(0, -2)};`,
+          );
     } else outputCode += `\nreturn output;`;
     const indentedCode = splitlines(outputCode)
       .map((line) => " ".repeat(this.options.codeIndent) + line)
