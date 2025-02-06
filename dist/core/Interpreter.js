@@ -44,8 +44,9 @@ class Interpreter {
         while (queue.length > 0) {
             let token = queue.shift();
             if (token) {
-                if (token.isBlock())
+                if (token.isBlock()) {
                     queue.unshift(...token.data.code);
+                }
                 else {
                     if (token.isFile()) {
                         let name = (0, util_1.resolveFileName)(token.data.filename);
@@ -92,7 +93,7 @@ class Interpreter {
         return {
             internal,
             output,
-            exectionTime: performance.now() - executionTimeStart,
+            executionTime: performance.now() - executionTimeStart,
         };
     }
 }

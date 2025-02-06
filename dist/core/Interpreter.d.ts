@@ -20,7 +20,7 @@ export declare class Interpreter {
             print: () => string;
         };
         output: string;
-        exectionTime: number;
+        executionTime: number;
     };
 }
 //# sourceMappingURL=Interpreter.d.ts.map

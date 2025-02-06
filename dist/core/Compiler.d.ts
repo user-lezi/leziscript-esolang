@@ -17,7 +17,7 @@ export declare class Compiler {
     get code(): string;
     run(): {
         outputCode: string;
-        exectionTime: number;
+        executionTime: number;
     };
 }
 //# sourceMappingURL=Compiler.d.ts.map

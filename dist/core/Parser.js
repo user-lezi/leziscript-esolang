@@ -103,8 +103,9 @@ class Parser {
         return new this(Tokenizer_1.Tokenizer.Tokenize(code), options);
     }
     static ParseLoopCount(token) {
-        if (token.startsWith("[") && token.endsWith("]"))
+        if (token.startsWith("[") && token.endsWith("]")) {
             token = token.slice(1, -1);
+        }
         return [...token].reduce((a, b) => a + this.LoopValues[b], 0);
     }
     #tokenizer;
@@ -121,9 +122,9 @@ class Parser {
             if (!token)
                 break;
             if (token.type !== Tokenizer_1.TokenType.Comment) {
-                if (token.type == Tokenizer_1.TokenType.Unknown)
+                if (token.type === Tokenizer_1.TokenType.Unknown)
                     throw ParserError.Unknown(tokenizer);
-                if (token.type == Tokenizer_1.TokenType.Looper) {
+                if (token.type === Tokenizer_1.TokenType.Looper) {
                     let parsedToken = new ParsedToken(ParsedTokenType.Loop, token);
                     let count = Parser.ParseLoopCount(token.token);
                     parsedToken.data.loopCount = count;
@@ -131,20 +132,20 @@ class Parser {
                     let toLoop = tokenizer.token();
                     if (toLoop) {
                         if (toLoop.type !== Tokenizer_1.TokenType.Comment) {
-                            if (toLoop.type == Tokenizer_1.TokenType.Unknown)
+                            if (toLoop.type === Tokenizer_1.TokenType.Unknown)
                                 throw ParserError.Unknown(tokenizer);
                             parsedToken.data.code = Parser.Parse(toLoop.token).tokens[0];
                             this.tokens.push(parsedToken);
                         }
                     }
                 }
-                if (token.type == Tokenizer_1.TokenType.Block) {
+                if (token.type === Tokenizer_1.TokenType.Block) {
                     let parsedToken = new ParsedToken(ParsedTokenType.Block, token);
                     let code = token.token.slice(1, -1);
                     parsedToken.data.code = Parser.Parse(code).tokens;
                     this.tokens.push(parsedToken);
                 }
-                if (token.type == Tokenizer_1.TokenType.Reserved) {
+                if (token.type === Tokenizer_1.TokenType.Reserved) {
                     let info = Tokenizer_1.Tokenizer.ReservedTokenInfo(token);
                     if (info.fileHead) {
                         let parsedToken = new ParsedToken(ParsedTokenType.File, token);
@@ -152,7 +153,7 @@ class Parser {
                         let fileNameToken = tokenizer.token();
                         if (fileNameToken) {
                             if (fileNameToken.type !== Tokenizer_1.TokenType.Comment) {
-                                if (fileNameToken.type == Tokenizer_1.TokenType.Unknown)
+                                if (fileNameToken.type === Tokenizer_1.TokenType.Unknown)
                                     throw ParserError.Unknown(tokenizer);
                                 if (fileNameToken.type !== Tokenizer_1.TokenType.Block)
                                     throw ParserError.DisallowedToken(tokenizer, ParsedTokenType.Block);

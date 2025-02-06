@@ -15,7 +15,7 @@ class Tokenizer {
     static CommentChar = '"';
     static Reserved = "[[]] [] < > @ . # : !".split(" ");
     static ReservedTokenInfo(token) {
-        const is = (s) => token.token == s;
+        const is = (s) => token.token === s;
         return {
             1: is("[[]]"),
             0: is("[]"),
@@ -94,10 +94,8 @@ class Tokenizer {
             throw new SyntaxError(`Unclosed Brackets (${depth})\n> From: ${code.slice(code.lastIndexOf(currentToken))}`);
         if (blockDepth > 0)
             throw new SyntaxError(`Unclosed Block (${blockDepth})\n> From: ${code.slice(code.lastIndexOf(currentToken))}`);
-        if (currentToken) {
+        if (currentToken)
             tokens.push(currentToken);
-            currentToken = "";
-        }
         return tokens;
     }
     static Tokenize(code) {
@@ -188,10 +186,10 @@ class Tokenizer {
 exports.Tokenizer = Tokenizer;
 function charInfo(char) {
     return {
-        open: char == "[",
-        close: char == "]",
-        blockOpen: char == "(",
-        blockClose: char == ")",
+        open: char === "[",
+        close: char === "]",
+        blockOpen: char === "(",
+        blockClose: char === ")",
     };
 }
 //# sourceMappingURL=Tokenizer.js.map
