@@ -15,8 +15,8 @@
     "lzscript",
     "esolang"
   ],
-  "author": "",
-  "license": "ISC",
+  "author": "lezii",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.17.9",
     "@types/uglify-js": "^3.17.5",
