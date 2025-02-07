@@ -14,5 +14,18 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = run;
+const core_1 = require("./core");
 __exportStar(require("./core"), exports);
+function run(code, mode, opts) {
+    if (mode === "compile") {
+        return core_1.Compiler.Compile(code, opts).run();
+    }
+    else if (mode === "interpreter") {
+        return core_1.Interpreter.Interpret(code, opts).run();
+    }
+    else {
+        throw new TypeError(`Invalid Mode`);
+    }
+}
 //# sourceMappingURL=index.js.map
