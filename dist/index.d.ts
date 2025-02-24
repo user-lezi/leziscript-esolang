@@ -1,4 +1,4 @@
-import { Compiler, ICompilerOptions, IInterpreterOptions, Interpreter } from "./core";
+import { Transpiler, ITranspilerOptions, IInterpreterOptions, Interpreter } from "./core";
 export * from "./core";
-export default function run<T extends "compile" | "interpreter">(code: string, mode: T, opts?: Partial<T extends "compile" ? ICompilerOptions : IInterpreterOptions>): T extends "compile" ? ReturnType<Compiler["run"]> : T extends "interpreter" ? ReturnType<Interpreter["run"]> : never;
+export default function run<T extends "transpile" | "interpreter">(code: string, mode: T, opts?: Partial<T extends "transpile" ? ITranspilerOptions : IInterpreterOptions>): T extends "transpile" ? ReturnType<Transpiler["run"]> : T extends "interpreter" ? ReturnType<Interpreter["run"]> : never;
 //# sourceMappingURL=index.d.ts.map

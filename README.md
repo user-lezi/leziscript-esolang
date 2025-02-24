@@ -27,15 +27,15 @@ npm install lzscript
 
 ## Usage  
 
-### Example 1: Running Leziscript in "compile" mode  
+### Example 1: Running Leziscript in "transpile" mode  
 ```typescript
 import run from 'lzscript';
 
 const code = `[[]][??!][]:![[]]>[[]][][][[]][?!][].>[??]([?][[]][]>)[??]<[?]([][[]]).>[?][[]][][]..>[??][[]].[??!]<.[???!]>[?]([[]][])[?!][[]].>[??]([?][[]][]>)[??]<[??][[]].>![[]][][][[]][].>[?][[]][][].>[][[]][][].[?????]<.`;
 
-const result = run(code, "compile");
+const result = run(code, "transpile");
 
-console.log("Compiled Code:", result.outputCode);
+console.log("Transpiled Code:", result.outputCode);
 console.log("Execution Time:", result.executionTime, "ms");
 ```
 
@@ -56,17 +56,17 @@ console.log("Internal Bit Array:", result.internal.bits);
 
 ## API Documentation  
 
-### `run<T extends "compile" | "interpreter">(code: string, mode: T, opts?: Partial<T extends "compile" ? ICompilerOptions : IInterpreterOptions>)`  
+### `run<T extends "transpile" | "interpreter">(code: string, mode: T, opts?: Partial<T extends "transpile" ? ITranspilerOptions : IInterpreterOptions>)`  
 
 #### Parameters:  
 - `code: string`: The Leziscript source code to be processed.  
-- `mode: "compile" | "interpreter"`:  
-  - `"compile"`: Transpiles Leziscript to JavaScript code.  
+- `mode: "transpile" | "interpreter"`:  
+  - `"transpile"`: Transpiles Leziscript to JavaScript code.  
   - `"interpreter"`: Directly interprets and runs the Leziscript code.  
-- `opts`: Optional configuration for the compiler or interpreter.  
+- `opts`: Optional configuration for the transpiler or interpreter.  
 
 #### Returns:  
-- If `mode` is `"compile"`:  
+- If `mode` is `"transpile"`:  
   `{ outputCode: string; executionTime: number; }`  
   
 - If `mode` is `"interpreter"`:  

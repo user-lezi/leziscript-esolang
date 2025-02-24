@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Compiler = exports.DefaultCompilerOption = void 0;
+exports.Transpiler = exports.DefaultTranspilerOption = void 0;
 const fs_1 = require("fs");
 const util_1 = require("../util");
 const Parser_1 = require("./Parser");
 const uglify_js_1 = require("uglify-js");
-const CompileCodeFor = {
+const TranspileCodeFor = {
     Loop: function (count, iteratorKey, codeLines, indent) {
         let indentedLines = codeLines
             .filter((x) => x)
@@ -14,23 +14,23 @@ const CompileCodeFor = {
         return `for(let ${iteratorKey} = 0; ${iteratorKey} < ${count}; ${iteratorKey}++) {\n${indentedLines}\n}`;
     },
 };
-exports.DefaultCompilerOption = {
+exports.DefaultTranspilerOption = {
     parser: Parser_1.DefaultParserOptions,
     codeIndent: 2,
     minify: false,
 };
-class Compiler {
-    static Compile(code, options) {
+class Transpiler {
+    static Transpile(code, options) {
         return new this(Parser_1.Parser.Parse(code, options?.parser), options);
     }
     #parser;
     #tokenizer;
     #loop_iterator = 0;
     options;
-    constructor(parser, options = exports.DefaultCompilerOption) {
+    constructor(parser, options = exports.DefaultTranspilerOption) {
         this.#parser = parser;
         this.#tokenizer = parser.tokenizer;
-        this.options = { ...exports.DefaultCompilerOption, ...options };
+        this.options = { ...exports.DefaultTranspilerOption, ...options };
     }
     __incLoopIteratorCount() {
         return this.#loop_iterator++;
@@ -49,9 +49,9 @@ class Compiler {
         let initialCode = `/* Initial Definitions */\nlet pointer = 0;\nlet bits = new Int32Array(3000);\nlet output = "";\nfunction _print() {\n${" ".repeat(this.options.codeIndent)}return String.fromCharCode(bits[pointer])\n}\n`;
         let outputCodeLines = splitlines(initialCode);
         for (let i = 0; i < this.#parser.tokens.length; i++) {
-            let compiled = compileToken(this.#parser.tokens[i], this);
-            if (compiled.length)
-                outputCodeLines.push(...compiled);
+            let transpiled = transpileToken(this.#parser.tokens[i], this);
+            if (transpiled.length)
+                outputCodeLines.push(...transpiled);
         }
         outputCodeLines = minifyOutput1(outputCodeLines);
         let outputCode = minifyOutput2(outputCodeLines.join("\n"));
@@ -76,26 +76,26 @@ class Compiler {
         };
     }
 }
-exports.Compiler = Compiler;
-function compileToken(token, compiler) {
+exports.Transpiler = Transpiler;
+function transpileToken(token, transpiler) {
     let output = [];
     if (token.isBlock()) {
         let subtokens = token.data.code;
         for (let i = 0; i < subtokens.length; i++) {
-            output.push(...compileToken(subtokens[i], compiler));
+            output.push(...transpileToken(subtokens[i], transpiler));
         }
     }
     else if (token.isFile()) {
         let name = (0, util_1.resolveFileName)(token.data.filename);
         let contents = (0, fs_1.readFileSync)(name, "utf8");
-        let subtokens = Parser_1.Parser.Parse(contents, compiler.parser.options).tokens;
+        let subtokens = Parser_1.Parser.Parse(contents, transpiler.parser.options).tokens;
         for (let i = 0; i < subtokens.length; i++) {
-            output.push(...compileToken(subtokens[i], compiler));
+            output.push(...transpileToken(subtokens[i], transpiler));
         }
     }
     else if (token.isLoop()) {
-        let codeLines = compileToken(token.data.code, compiler);
-        let loopStatement = splitlines(CompileCodeFor.Loop(token.data.loopCount, "iterator_" + compiler.__incLoopIteratorCount(), codeLines, compiler.options.codeIndent));
+        let codeLines = transpileToken(token.data.code, transpiler);
+        let loopStatement = splitlines(TranspileCodeFor.Loop(token.data.loopCount, "iterator_" + transpiler.__incLoopIteratorCount(), codeLines, transpiler.options.codeIndent));
         output.push(...loopStatement);
     }
     else if (token.isNormal()) {
@@ -233,4 +233,4 @@ function parseLastLine(line, type) {
             return "";
     }
 }
-//# sourceMappingURL=Compiler.js.map
+//# sourceMappingURL=Transpiler.js.map

@@ -11,17 +11,17 @@ import { Tokenizer } from "./Tokenizer";
 import { minify } from "uglify-js";
 
 /**
- * An object containing methods to compile code for different constructs.
+ * An object containing methods to transpile code for different constructs.
  */
-const CompileCodeFor = {
+const TranspileCodeFor = {
   /**
-   * Compiles code to a loop structure (for loop) in JavaScript.
+   * Transpiles code to a loop structure (for loop) in JavaScript.
    *
    * @param count - The number of iterations for the loop.
    * @param iteratorKey - The key/variable name for the iterator (e.g., "i").
    * @param codeLines - The lines of code to be executed within the loop.
    * @param indent - The number of spaces to use for indentation in the generated code.
-   * @returns The compiled JavaScript code as a string with the loop structure.
+   * @returns The transpiled JavaScript code as a string with the loop structure.
    */
   Loop: function (
     count: number,
@@ -38,9 +38,9 @@ const CompileCodeFor = {
 };
 
 /**
- * The options used for the compiler, including parsing settings, code indentation, and minification.
+ * The options used for the transpiler, including parsing settings, code indentation, and minification.
  */
-export interface ICompilerOptions {
+export interface ITranspilerOptions {
   /**
    * The options for the parser.
    */
@@ -52,54 +52,54 @@ export interface ICompilerOptions {
   codeIndent: number;
 
   /**
-   * Whether to minify the compiled code (removes unnecessary whitespace and line breaks).
+   * Whether to minify the transpiled code (removes unnecessary whitespace and line breaks).
    */
   minify: boolean;
 }
 
 /**
- * The default compiler options.
+ * The default transpiler options.
  */
-export const DefaultCompilerOption: ICompilerOptions = {
+export const DefaultTranspilerOption: ITranspilerOptions = {
   parser: DefaultParserOptions, // Use default parser options
   codeIndent: 2, // Default indentation of 2 spaces
   minify: false, // Do not minify the code by default
 };
 
 /**
- * The Compiler class is responsible for converting parsed code into executable JavaScript.
- * It provides the functionality to compile code into a JavaScript function with support for loops, printing, and other constructs.
+ * The Transpiler class is responsible for converting parsed code into executable JavaScript.
+ * It provides the functionality to transpile code into a JavaScript function with support for loops, printing, and other constructs.
  */
-export class Compiler {
+export class Transpiler {
   /**
-   * Static method to compile code using the given options.
+   * Static method to transpile code using the given options.
    *
-   * @param code - The code to compile.
-   * @param options - Optional compiler options.
-   * @returns A new instance of the `Compiler` class with the compiled output code.
+   * @param code - The code to transpile.
+   * @param options - Optional transpiler options.
+   * @returns A new instance of the `Transpiler` class with the transpiled output code.
    */
-  public static Compile(code: string, options?: Partial<ICompilerOptions>) {
+  public static Transpile(code: string, options?: Partial<ITranspilerOptions>) {
     return new this(Parser.Parse(code, options?.parser), options);
   }
 
   #parser: Parser;
   #tokenizer: Tokenizer;
   #loop_iterator = 0;
-  public options: ICompilerOptions;
+  public options: ITranspilerOptions;
 
   /**
-   * Constructs a `Compiler` instance with the given parser and options.
+   * Constructs a `Transpiler` instance with the given parser and options.
    *
    * @param parser - The parser that has already parsed the input code.
-   * @param options - Compiler options, including indentation and minification settings.
+   * @param options - Transpiler options, including indentation and minification settings.
    */
   public constructor(
     parser: Parser,
-    options: Partial<ICompilerOptions> = DefaultCompilerOption,
+    options: Partial<ITranspilerOptions> = DefaultTranspilerOption,
   ) {
     this.#parser = parser;
     this.#tokenizer = parser.tokenizer;
-    this.options = { ...DefaultCompilerOption, ...options };
+    this.options = { ...DefaultTranspilerOption, ...options };
   }
 
   /**
@@ -113,14 +113,14 @@ export class Compiler {
   }
 
   /**
-   * Returns the parser used by the compiler.
+   * Returns the parser used by the transpiler.
    */
   public get parser() {
     return this.#parser;
   }
 
   /**
-   * Returns the tokenizer used by the compiler.
+   * Returns the tokenizer used by the transpiler.
    */
   public get tokenizer() {
     return this.#tokenizer;
@@ -136,17 +136,17 @@ export class Compiler {
   /**
    * Runs the compilation process, converting the parsed tokens into executable JavaScript code.
    *
-   * @returns An object containing the compiled output code and the execution time.
+   * @returns An object containing the transpiled output code and the execution time.
    */
   public run() {
     let executionTimeStart = performance.now();
     let initialCode = `/* Initial Definitions */\nlet pointer = 0;\nlet bits = new Int32Array(3000);\nlet output = "";\nfunction _print() {\n${" ".repeat(this.options.codeIndent)}return String.fromCharCode(bits[pointer])\n}\n`;
     let outputCodeLines: string[] = splitlines(initialCode);
 
-    // Compile each token into executable JavaScript code
+    // Transpile each token into executable JavaScript code
     for (let i = 0; i < this.#parser.tokens.length; i++) {
-      let compiled = compileToken(this.#parser.tokens[i], this);
-      if (compiled.length) outputCodeLines.push(...compiled);
+      let transpiled = transpileToken(this.#parser.tokens[i], this);
+      if (transpiled.length) outputCodeLines.push(...transpiled);
     }
 
     // Minify the output code if required
@@ -174,7 +174,7 @@ export class Compiler {
 
     outputCode = `function main() {\n${indentedCode}\n}`;
 
-    // Return the compiled code and execution time
+    // Return the transpiled code and execution time
     return {
       outputCode,
       executionTime: performance.now() - executionTimeStart,
@@ -183,50 +183,50 @@ export class Compiler {
 }
 
 /**
- * Compiles a parsed token into executable JavaScript code.
+ * Transpiles a parsed token into executable JavaScript code.
  * The function handles various token types such as block, loop, file, and normal.
- * It recursively compiles block and file tokens and processes normal tokens to generate the corresponding JavaScript code.
+ * It recursively transpiles block and file tokens and processes normal tokens to generate the corresponding JavaScript code.
  *
- * @param token - The parsed token to compile.
- * @param compiler - The compiler instance that provides configuration options for the compilation.
- * @returns An array of strings representing the compiled JavaScript code.
+ * @param token - The parsed token to transpile.
+ * @param transpiler - The transpiler instance that provides configuration options for the compilation.
+ * @returns An array of strings representing the transpiled JavaScript code.
  */
-function compileToken(
+function transpileToken(
   token: ParsedToken<ParsedTokenType>,
-  compiler: Compiler,
+  transpiler: Transpiler,
 ): string[] {
   let output: string[] = [];
 
-  // If the token is a block, compile its contained tokens
+  // If the token is a block, transpile its contained tokens
   if (token.isBlock()) {
     let subtokens = token.data.code;
     for (let i = 0; i < subtokens.length; i++) {
-      output.push(...compileToken(subtokens[i], compiler));
+      output.push(...transpileToken(subtokens[i], transpiler));
     }
   }
-  // If the token is a file, read and compile its contents
+  // If the token is a file, read and transpile its contents
   else if (token.isFile()) {
     let name = resolveFileName(token.data.filename);
     let contents = readFileSync(name, "utf8");
-    let subtokens = Parser.Parse(contents, compiler.parser.options).tokens;
+    let subtokens = Parser.Parse(contents, transpiler.parser.options).tokens;
     for (let i = 0; i < subtokens.length; i++) {
-      output.push(...compileToken(subtokens[i], compiler));
+      output.push(...transpileToken(subtokens[i], transpiler));
     }
   }
-  // If the token is a loop, compile it with a loop statement
+  // If the token is a loop, transpile it with a loop statement
   else if (token.isLoop()) {
-    let codeLines = compileToken(token.data.code, compiler);
+    let codeLines = transpileToken(token.data.code, transpiler);
     let loopStatement = splitlines(
-      CompileCodeFor.Loop(
+      TranspileCodeFor.Loop(
         token.data.loopCount,
-        "iterator_" + compiler.__incLoopIteratorCount(),
+        "iterator_" + transpiler.__incLoopIteratorCount(),
         codeLines,
-        compiler.options.codeIndent,
+        transpiler.options.codeIndent,
       ),
     );
     output.push(...loopStatement);
   }
-  // If the token is a normal operation, compile it to its corresponding JavaScript code
+  // If the token is a normal operation, transpile it to its corresponding JavaScript code
   else if (token.isNormal()) {
     let info = token.data;
 

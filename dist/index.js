@@ -18,8 +18,8 @@ exports.default = run;
 const core_1 = require("./core");
 __exportStar(require("./core"), exports);
 function run(code, mode, opts) {
-    if (mode === "compile") {
-        return core_1.Compiler.Compile(code, opts).run();
+    if (mode === "transpile") {
+        return core_1.Transpiler.Transpile(code, opts).run();
     }
     else if (mode === "interpreter") {
         return core_1.Interpreter.Interpret(code, opts).run();

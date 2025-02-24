@@ -1,16 +1,16 @@
 import { Parser, ParserOptions } from "./Parser";
 import { Tokenizer } from "./Tokenizer";
-export interface ICompilerOptions {
+export interface ITranspilerOptions {
     parser: ParserOptions;
     codeIndent: number;
     minify: boolean;
 }
-export declare const DefaultCompilerOption: ICompilerOptions;
-export declare class Compiler {
+export declare const DefaultTranspilerOption: ITranspilerOptions;
+export declare class Transpiler {
     #private;
-    static Compile(code: string, options?: Partial<ICompilerOptions>): Compiler;
-    options: ICompilerOptions;
-    constructor(parser: Parser, options?: Partial<ICompilerOptions>);
+    static Transpile(code: string, options?: Partial<ITranspilerOptions>): Transpiler;
+    options: ITranspilerOptions;
+    constructor(parser: Parser, options?: Partial<ITranspilerOptions>);
     __incLoopIteratorCount(): number;
     get parser(): Parser;
     get tokenizer(): Tokenizer;
@@ -20,4 +20,4 @@ export declare class Compiler {
         executionTime: number;
     };
 }
-//# sourceMappingURL=Compiler.d.ts.map
+//# sourceMappingURL=Transpiler.d.ts.map

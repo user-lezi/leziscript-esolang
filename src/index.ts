@@ -1,6 +1,6 @@
 import {
-  Compiler,
-  ICompilerOptions,
+  Transpiler,
+  ITranspilerOptions,
   IInterpreterOptions,
   Interpreter,
 } from "./core";
@@ -8,37 +8,39 @@ import {
 export * from "./core";
 
 /**
- * Executes code in either "compile" or "interpreter" mode.
+ * Executes code in either "transpile" or "interpreter" mode.
  *
- * @template T - The mode of execution, either "compile" or "interpreter".
+ * @template T - The mode of execution, either "transpile" or "interpreter".
  * @param code - The source code to be processed.
  * @param mode - Specifies the execution mode:
- *  - `"compile"`: Compiles the code and returns the generated output.
+ *  - `"transpile"`: Transpiles the code and returns the generated output.
  *  - `"interpreter"`: Interprets the code and returns the execution result.
  * @param opts - Optional configuration object:
- *  - For `"compile"`, accepts `Partial<ICompilerOptions>`.
+ *  - For `"transpile"`, accepts `Partial<ITranspilerOptions>`.
  *  - For `"interpreter"`, accepts `Partial<IInterpreterOptions>`.
  *
  * @returns Depending on the `mode` parameter:
- *  - `"compile"`: Returns an object containing the compiled code and execution time.
+ *  - `"transpile"`: Returns an object containing the transpiled code and execution time.
  *  - `"interpreter"`: Returns an object containing the internal state and output of the interpreter.
  *
- * @throws {TypeError} If the `mode` is neither `"compile"` nor `"interpreter"`.
+ * @throws {TypeError} If the `mode` is neither `"transpile"` nor `"interpreter"`.
  */
-export default function run<T extends "compile" | "interpreter">(
+export default function run<T extends "transpile" | "interpreter">(
   code: string,
   mode: T,
-  opts?: Partial<T extends "compile" ? ICompilerOptions : IInterpreterOptions>,
-): T extends "compile"
-  ? ReturnType<Compiler["run"]>
+  opts?: Partial<
+    T extends "transpile" ? ITranspilerOptions : IInterpreterOptions
+  >,
+): T extends "transpile"
+  ? ReturnType<Transpiler["run"]>
   : T extends "interpreter"
     ? ReturnType<Interpreter["run"]>
     : never {
-  if (mode === "compile") {
-    // Compile the code using the Compiler class and run it
-    return Compiler.Compile(
+  if (mode === "transpile") {
+    // Transpile the code using the Transpiler class and run it
+    return Transpiler.Transpile(
       code,
-      opts as Partial<ICompilerOptions>,
+      opts as Partial<ITranspilerOptions>,
     ).run() as any;
   } else if (mode === "interpreter") {
     // Interpret the code using the Interpreter class and run it
