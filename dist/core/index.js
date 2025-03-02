@@ -18,4 +18,5 @@ __exportStar(require("./Transpiler"), exports);
 __exportStar(require("./Interpreter"), exports);
 __exportStar(require("./Parser"), exports);
 __exportStar(require("./Tokenizer"), exports);
+__exportStar(require("./ReverseInterpreter"), exports);
 //# sourceMappingURL=index.js.map
