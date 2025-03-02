@@ -196,7 +196,7 @@ export class Tokenizer {
       token.length > 2 &&
       token[0] == "[" &&
       token.slice(-1) == "]" &&
-      token.slice(1, -1).replace(/^[?!]+$/, "").length == 0
+      token.slice(1, -1).replace(/^[&?!]+$/, "").length == 0
     )
       return TokenType.Looper;
     if (this.Reserved.indexOf(token) > -1) return TokenType.Reserved;

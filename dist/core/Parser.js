@@ -96,6 +96,7 @@ exports.DefaultParserOptions = {
 };
 class Parser {
     static LoopValues = {
+        "&": 4,
         "?": 2,
         "!": 1,
     };

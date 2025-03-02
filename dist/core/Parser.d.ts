@@ -31,6 +31,7 @@ export declare const DefaultParserOptions: ParserOptions;
 export declare class Parser {
     #private;
     static readonly LoopValues: {
+        "&": number;
         "?": number;
         "!": number;
     };

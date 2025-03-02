@@ -59,10 +59,11 @@ Loops allow you to repeat commands and shorten your code.
   - Example: `[??!][[]]`  
     - `n` is the value inside the first set of brackets (`??!`)  
     - `m` is the command after the brackets (`[[]]`)  
-- **n** is represented using a combination of `?` and `!`:  
+- **n** is represented using a combination of `&`, `?` and `!`:  
+  - `&` = 4
   - `?` = 2  
   - `!` = 1  
-- To parse **n**, sum the values of all `?` and `!`.  
+- To parse **n**, sum the values of all `&`, `?` and `!`.  
   - Example: `??!` = `2 + 2 + 1 = 5`  
 - Thus, `[??!][[]]` repeats `[[]]` five times, resulting in `[[]][[]][[]][[]][[]]`, or `11111` in binary.  
 

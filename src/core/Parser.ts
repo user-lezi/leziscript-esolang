@@ -224,6 +224,7 @@ export const DefaultParserOptions: ParserOptions = {
 export class Parser {
   /** Mapping of special loop symbols to their respective loop counts. */
   public static readonly LoopValues = {
+    "&": 4,
     "?": 2,
     "!": 1,
   };
@@ -241,7 +242,7 @@ export class Parser {
   /**
    * Parses a loop count from a token containing loop symbols.
    * Supports special syntax with `[` and `]` brackets.
-   * @param token The token containing loop symbols (`?`, `!`).
+   * @param token The token containing loop symbols (`&`, `?`, `!`).
    * @returns The total loop count based on the token.
    */
   public static ParseLoopCount(token: string) {
